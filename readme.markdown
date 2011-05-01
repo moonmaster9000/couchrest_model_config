@@ -122,3 +122,8 @@ CouchDB uri for the database:
         default "http://localhost:5984/blog"
       end
     end
+
+## LICENSE
+
+There is no license. Why? Because this software has been committed to the public domain. DO ANYTHING WITH IT!!!
+
