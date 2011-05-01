@@ -43,3 +43,26 @@ end
 
 When /^I call CouchRest::Model::Config\.edit$/ do
 end
+
+Given /^I have a Book model$/ do
+  class Book < CouchRest::Model::Base; end
+end
+
+Given /^I have configured databases for 'default', 'production', 'development', and 'test' environments$/ do
+  CouchRest::Model::Config.edit do
+    model Book do
+      default "book_default_db"
+      production "book_production_db"
+      development "book_development_db"
+      test "book_test_db"
+    end
+  end
+end
+
+When /^I call CouchRest::Model::Config\.Book\.current_database$/ do
+  @current_database = CouchRest::Model::Config.Book.current_database
+end
+
+Then /^I should get back the database I cofigured for the "([^"]*)" environment$/ do |env|
+  @current_database.name.should == "book_#{env}_db"
+end

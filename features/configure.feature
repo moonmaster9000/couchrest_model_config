@@ -1,24 +1,40 @@
 Feature: Configure CouchRest::Model database connections
   
+  @server
   Scenario: Default CouchRest server
     When I call CouchRest::Model::Config.server.default
     Then I should get back a CouchRest server defaulted to host "http://127.0.0.1:5984"
-
+  
+  @server
   Scenario: Configuring the CouchRest server
     When I call CouchRest::Model::Config.edit
     Then I should be able to pass a block to it that configures the default CouchRest server
 
+  @server
   Scenario Outline: Getting the appropriate server
     Given I have configured servers for 'default', 'production', 'development', and 'test' environments
     And my app is in the "<environment>" environment
     When I call CouchRest::Model::Config.current_server
-    Then I should get back the server I configured for the "<environment>" environment
+    Then I should get back the server I configured for the "<target>" environment
     
     Examples:
-      |environment|
-      |default|
-      |test|
-      |development|
-      |production|
-    
+      |environment|target|
+      |test|test|
+      |development|development|
+      |production|production|
+      |poo|default|
 
+  @db
+  Scenario Outline: Configuring the database for a model 
+    Given I have a Book model
+    And I have configured databases for 'default', 'production', 'development', and 'test' environments
+    And my app is in the "<environment>" environment
+    When I call CouchRest::Model::Config.Book.current_database
+    Then I should get back the database I cofigured for the "<target>" environment
+    
+    Examples:
+      |environment|target|
+      |test|test|
+      |development|development|
+      |production|production|
+      |poo|default|
