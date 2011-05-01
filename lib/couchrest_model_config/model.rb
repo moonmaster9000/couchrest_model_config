@@ -8,7 +8,7 @@ module CouchRest
 
         def method_missing(environment, *args, &block)
           return @environments[environment] if args.length == 0
-          server = args.length == 2 ? args.last : CouchRest::Model::Config.server
+          server = args.length == 2 ? args.last : CouchRest::Model::Config.current_server
           @environments[environment] = server.database! args.first
         end
       end

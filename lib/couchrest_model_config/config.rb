@@ -3,9 +3,16 @@ module CouchRest
     module Config
       extend self
 
-      def server(couchrest_server=nil)
-        @server = couchrest_server
-        @server ||= CouchRest.new
+      def environment(&block)
+        block ? environment_proc(block) : environment_proc.call
+      end
+
+      def current_server
+        Server.send(environment) || Server.default
+      end
+      
+      def server(&block)
+        block ? Server.instance_eval(&block) : Server
       end
 
       def edit(&block)
@@ -18,7 +25,8 @@ module CouchRest
 
       def reset
         @model_configs = {}
-        @server = nil
+        @environment_proc = nil
+        Server.reset
       end
 
       def method_missing(model, *args, &block)
@@ -28,6 +36,14 @@ module CouchRest
       end
 
       private
+      def environment_proc(p=nil)
+        if p.nil?
+          @environment_proc ||= proc { Rails.env }
+        else
+          @environment_proc = p
+        end
+      end
+
       def configure_model(model, &block)
         model_configs(model).instance_eval &block
       end
