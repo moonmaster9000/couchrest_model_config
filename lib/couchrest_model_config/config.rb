@@ -23,6 +23,12 @@ module CouchRest
         configure_model m, &block
       end
 
+      def models(*args, &block)
+        args.each do |m|
+          configure_model m, &block
+        end
+      end
+
       def reset
         @model_configs = {}
         @environment_proc = nil

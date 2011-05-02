@@ -66,3 +66,29 @@ end
 Then /^I should get back the database I cofigured for the "([^"]*)" environment$/ do |env|
   @current_database.name.should == "book_#{env}_db"
 end
+
+Given /^I have several models$/ do
+  class Models1 < CouchRest::Model::Base; end 
+  class Models2 < CouchRest::Model::Base; end 
+  class Models3 < CouchRest::Model::Base; end 
+  class Models4 < CouchRest::Model::Base; end 
+end
+
+Given /^I set their database via the `models` method$/ do
+  CouchRest::Model::Config.edit do
+    models Models1, Models2, Models3, Models4 do
+      default "default_db"
+      test "test_db"
+      development "development_db"
+      production "production_db"
+    end
+  end
+end
+
+When /^I lookup their current_database$/ do
+  @dbs = (1..4).to_a.map {|i| CouchRest::Model::Config.send("Models#{i}").current_database}
+end
+
+Then /^their database should be the one I configured for the "([^"]*)" environment$/ do |env|
+  @dbs.all? {|db| db.name == "#{env}_db"}.should be_true
+end
