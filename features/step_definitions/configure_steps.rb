@@ -178,3 +178,46 @@ Then /^the database should use the domain provided for the server instead of the
   CouchRest::Model::Config.ModelWithCustomServer.default.name.should == "model_db"
   CouchRest::Model::Config.ModelWithCustomServer.default.server.uri.should == "http://my.custom.server.com"
 end
+
+Given /^I have configured the database for a model directly on the model via `use_database`$/ do
+  server = CouchRest.new
+  DIRECTLY_CONFIGURED_MODEL_DB = server.database! "directly_configured_model_database"
+  class DirectlyConfiguredModel < CouchRest::Model::Base
+    use_database DIRECTLY_CONFIGURED_MODEL_DB
+  end
+  @model = DirectlyConfiguredModel
+end
+
+Given /^I have configured the database for that model via CouchRest::Model::Config$/ do
+  CouchRest::Model::Config.edit do
+    database DirectlyConfiguredModel do
+      default "indirectly_configured_db"
+    end
+  end
+end
+
+When /^I call the `database` method on the model$/ do
+  @model_database = @model.database 
+end
+
+Then /^I should receive the database configured directly on the model via `use_database`$/ do
+  @model_database.name.should == "directly_configured_model_database"
+end
+
+Given /^I have configured the database for a model via CouchRest::Model::Config$/ do
+  class IndirectlyConfiguredModel < CouchRest::Model::Base; end
+  CouchRest::Model::Config.edit do
+    database IndirectlyConfiguredModel do
+      default "indirect_db"
+    end
+  end
+  @model = IndirectlyConfiguredModel
+end
+
+Then /^I should receive the database I configured via CouchRest::Model::Config$/ do
+  @model_database.name.should == "indirect_db"
+end
+
+When /^I call the `database` method on an instance of the model$/ do
+  @model_database = IndirectlyConfiguredModel.new.database
+end

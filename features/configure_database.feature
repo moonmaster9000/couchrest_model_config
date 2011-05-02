@@ -59,8 +59,22 @@ Feature: Configure CouchRest::Model database connections
       |production|production|
       |poo|default|
 
-  @focus
   Scenario: Setting the server while configuring the database
     When I configure the database for a model
     Then I should be able to provide the full URI to the database
     And the database should use the domain provided for the server instead of the default server
+
+  @focus
+  Scenario: Database configured directly on the model takes highest precedence
+    Given I have configured the database for a model directly on the model via `use_database`
+    And I have configured the database for that model via CouchRest::Model::Config
+    When I call the `database` method on the model
+    Then I should receive the database configured directly on the model via `use_database`
+  
+  @focus
+  Scenario: Looking up the model's database via the model itself
+    Given I have configured the database for a model via CouchRest::Model::Config
+    When I call the `database` method on the model
+    Then I should receive the database I configured via CouchRest::Model::Config
+    When I call the `database` method on an instance of the model
+    Then I should receive the database I configured via CouchRest::Model::Config
