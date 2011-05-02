@@ -19,12 +19,19 @@ module CouchRest
 
         def current_database
           current_env = CouchRest::Model::Config.environment.to_sym
+
+          # if this model was configured, that takes precedence
           db = @environments[current_env] || @environments[:default]
+
+          # next any of it's ancestors take precedence
           @klass.ancestors.each do |a| 
             db ||= 
-              CouchRest::Model::Config.send(a.to_s).environments[current_env] || 
-              CouchRest::Model::Config.send(a.to_s).environments[:default]
+              CouchRest::Model::Config.send(a.to_s).send(current_env) || 
+              CouchRest::Model::Config.send(a.to_s).send(:default)
           end unless db
+
+          # next, the default database takes precedence
+          db ||= CouchRest::Model::Config.default_database
           db 
         end
 

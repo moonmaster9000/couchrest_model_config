@@ -20,13 +20,21 @@ module CouchRest
       end
 
       def database(*args, &block)
-        args.each {|m| configure_model m, &block}
+        if args.empty?
+          configure_default_database &block
+        else
+          args.each {|m| configure_model m, &block}
+        end
       end
 
       def reset
         @model_configs = {}
         @environment_proc = nil
         Server.reset
+      end
+
+      def default_database
+        model_configs(:default_database).send(self.environment) || model_configs(:default_database).default
       end
 
       def method_missing(model, *args, &block)
@@ -51,6 +59,10 @@ module CouchRest
       def model_configs(model=nil)
         @model_configs ||= {}
         return (@model_configs[model] ||= Model.new model) if model
+      end
+
+      def configure_default_database(&block)
+        model_configs(:default_database).instance_eval &block
       end
     end
   end

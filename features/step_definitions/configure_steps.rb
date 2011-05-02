@@ -122,3 +122,21 @@ end
 Then /^their database should be the one I configured for the "([^"]*)" environment on the parent$/ do |env|
   @dbs.all? {|db| db.name == "#{env}_db"}.should be_true
 end
+
+Given /^I configure default databases for all models for the 'test', 'development', 'production', and 'default' environments$/ do
+  CouchRest::Model::Config.edit do
+    database do
+      default "default_db"
+      production "production_db"
+      development "development_db"
+      test "test_db"
+    end
+  end
+end
+
+Given /^I do not configure the database for any specific models$/ do
+end
+
+Then /^their database should be the one I configured for the "([^"]*)" environment in the default database configuration section$/ do |env|
+  @dbs.all? {|db| db.name == "#{env}_db"}.should be_true
+end

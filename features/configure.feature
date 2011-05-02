@@ -69,5 +69,19 @@ Feature: Configure CouchRest::Model database connections
       |development|development|
       |production|production|
       |poo|default|
+  
+  @db @focus
+  Scenario Outline: Setting the default database
+    Given I have several models
+    And I configure default databases for all models for the 'test', 'development', 'production', and 'default' environments
+    And I do not configure the database for any specific models
+    And my app is in the "<environment>" environment
+    When I lookup their current_database 
+    Then their database should be the one I configured for the "<target>" environment in the default database configuration section
 
-  Scenario: Setting the default database
+    Examples:
+      |environment|target|
+      |test|test|
+      |development|development|
+      |production|production|
+      |poo|default|
