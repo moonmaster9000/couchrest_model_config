@@ -18,21 +18,9 @@ module CouchRest
         end
 
         def current_database
-          current_env = CouchRest::Model::Config.environment.to_sym
-
-          # if this model was configured, that takes precedence
-          db = @environments[current_env] || @environments[:default]
-
-          # next any of it's ancestors take precedence
-          @klass.ancestors.each do |a| 
-            db ||= 
-              CouchRest::Model::Config.for(a).send(current_env) || 
-              CouchRest::Model::Config.for(a).default
-          end unless db
-
-          # next, the default database takes precedence
-          db ||= CouchRest::Model::Config.default_database
-          db 
+          configured_model_database ||
+          configured_ancestor_database ||
+          CouchRest::Model::Config.default_database
         end
 
         def method_missing(environment, *args, &block)
@@ -48,6 +36,24 @@ module CouchRest
           else
             [CouchRest::Model::Config.current_server, db]
           end
+        end
+
+        def configured_model_database
+          @environments[current_env] || @environments[:default]
+        end
+
+        def configured_ancestor_database
+          db = nil
+          @klass.ancestors.each do |a| 
+            db ||= 
+              CouchRest::Model::Config.for(a).send(current_env) || 
+              CouchRest::Model::Config.for(a).default
+          end
+          db
+        end
+
+        def current_env
+          current_env = CouchRest::Model::Config.environment.to_sym
         end
       end
     end
