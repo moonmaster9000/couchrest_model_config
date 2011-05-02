@@ -26,8 +26,8 @@ module CouchRest
           # next any of it's ancestors take precedence
           @klass.ancestors.each do |a| 
             db ||= 
-              CouchRest::Model::Config.send(a.to_s).send(current_env) || 
-              CouchRest::Model::Config.send(a.to_s).send(:default)
+              CouchRest::Model::Config.for(a).send(current_env) || 
+              CouchRest::Model::Config.for(a).default
           end unless db
 
           # next, the default database takes precedence

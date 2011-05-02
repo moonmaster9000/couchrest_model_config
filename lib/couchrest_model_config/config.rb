@@ -37,6 +37,11 @@ module CouchRest
         model_configs(:default_database).send(self.environment) || model_configs(:default_database).default
       end
 
+      def for(m)
+        m = m.to_s.camelize.constantize unless m.class == Class
+        model_configs(m)
+      end
+
       def method_missing(model, *args, &block)
         model = model.to_s.camelize.constantize
         return model_configs(model) unless block

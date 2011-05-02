@@ -70,7 +70,7 @@ Feature: Configure CouchRest::Model database connections
       |production|production|
       |poo|default|
   
-  @db @focus
+  @db
   Scenario Outline: Setting the default database
     Given I have several models
     And I configure default databases for all models for the 'test', 'development', 'production', and 'default' environments
@@ -85,3 +85,9 @@ Feature: Configure CouchRest::Model database connections
       |development|development|
       |production|production|
       |poo|default|
+  
+  @db @focus
+  Scenario: Configuring namespace models
+    Given I have a namespaced model
+    Then  I should be able to configure it just like all other models
+    And   I should be able to retrieve configuration information about it via the `for` method on CouchRest::Model::Config

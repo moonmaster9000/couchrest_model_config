@@ -140,3 +140,24 @@ end
 Then /^their database should be the one I configured for the "([^"]*)" environment in the default database configuration section$/ do |env|
   @dbs.all? {|db| db.name == "#{env}_db"}.should be_true
 end
+
+Given /^I have a namespaced model$/ do
+  module ConfigTest
+    class Model < CouchRest::Model::Base; end
+  end
+end
+
+Then /^I should be able to configure it just like all other models$/ do
+  CouchRest::Model::Config.edit do
+    database ConfigTest::Model do
+      production "config_test_model_production"
+      default "config_test_model_default"
+    end
+  end
+end
+
+Then /^I should be able to retrieve configuration information about it via the `for` method on CouchRest::Model::Config$/ do
+  CouchRest::Model::Config.for(ConfigTest::Model).production.name.should == "config_test_model_production"
+  CouchRest::Model::Config.for(ConfigTest::Model).default.name.should == "config_test_model_default"
+  CouchRest::Model::Config.for(ConfigTest::Model).test.should be_nil
+end
