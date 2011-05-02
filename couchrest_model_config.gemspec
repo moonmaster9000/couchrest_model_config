@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.description = %q{Simple, environment-based server and database configuration for couchrest_model.}
   s.email = %q{moonmaster9000@gmail.com}
   s.extra_rdoc_files = [
-    "readme.md"
+    "readme.markdown"
   ]
   
   s.files         = `git ls-files`.split("\n")
