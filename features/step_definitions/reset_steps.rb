@@ -1,7 +1,7 @@
 Given /^I have configured CouchRest::Model via CouchRest::Model::Config$/ do
   class Book < CouchRest::Model::Base; end
   CouchRest::Model::Config.edit do
-    model Book do
+    database Book do
       default "book_db" 
     end
 

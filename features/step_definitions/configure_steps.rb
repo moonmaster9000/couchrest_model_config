@@ -50,7 +50,7 @@ end
 
 Given /^I have configured databases for 'default', 'production', 'development', and 'test' environments$/ do
   CouchRest::Model::Config.edit do
-    model Book do
+    database Book do
       default "book_default_db"
       production "book_production_db"
       development "book_development_db"
@@ -74,9 +74,9 @@ Given /^I have several models$/ do
   class Models4 < CouchRest::Model::Base; end 
 end
 
-Given /^I set their database via the `models` method$/ do
+Given /^I set their database via the `database` method$/ do
   CouchRest::Model::Config.edit do
-    models Models1, Models2, Models3, Models4 do
+    database Models1, Models2, Models3, Models4 do
       default "default_db"
       test "test_db"
       development "development_db"
@@ -101,9 +101,9 @@ Given /^I have several models that inherit from a single parent$/ do
   class ChildModel4 < ParentModel; end
 end
 
-Given /^I configure the parent database via the `models` method$/ do
+Given /^I configure the parent database via the `database` method$/ do
   CouchRest::Model::Config.edit do 
-    model ParentModel do
+    database ParentModel do
       default "default_db"
       production "production_db"
       development "development_db"

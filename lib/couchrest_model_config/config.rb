@@ -19,12 +19,8 @@ module CouchRest
         self.instance_eval &block
       end
 
-      def model(m, &block)
-        configure_model m, &block
-      end
-
-      def models(*args, &block)
-        args.each {|m| configure_model m, &block }
+      def database(*args, &block)
+        args.each {|m| configure_model m, &block}
       end
 
       def reset
