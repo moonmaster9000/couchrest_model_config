@@ -54,7 +54,7 @@ Feature: Configure CouchRest::Model database connections
       |production|production|
       |poo|default|
 
-  @db @focus
+  @db 
   Scenario Outline: Configuring the database for a set of models
     Given I have several models that inherit from a single parent
     And I configure the parent database via the `models` method
@@ -69,3 +69,5 @@ Feature: Configure CouchRest::Model database connections
       |development|development|
       |production|production|
       |poo|default|
+
+  Scenario: Setting the default database
