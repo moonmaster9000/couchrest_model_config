@@ -39,13 +39,29 @@ Feature: Configure CouchRest::Model database connections
       |production|production|
       |poo|default|
 
-  @db @focus
+  @db
   Scenario Outline: Configuring the database for a set of models
     Given I have several models
     And I set their database via the `models` method
     And my app is in the "<environment>" environment
     When I lookup their current_database 
     Then their database should be the one I configured for the "<target>" environment
+    
+    Examples:
+      |environment|target|
+      |test|test|
+      |development|development|
+      |production|production|
+      |poo|default|
+
+  @db @focus
+  Scenario Outline: Configuring the database for a set of models
+    Given I have several models that inherit from a single parent
+    And I configure the parent database via the `models` method
+    And I do not configure the database for the child models 
+    And my app is in the "<environment>" environment
+    When I lookup the current_database for the child models 
+    Then their database should be the one I configured for the "<target>" environment on the parent
     
     Examples:
       |environment|target|

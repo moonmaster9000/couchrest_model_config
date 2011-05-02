@@ -2,7 +2,10 @@ module CouchRest
   module Model
     module Config
       class Model
-        def initialize
+        attr_reader :environments
+
+        def initialize(klass)
+          @klass = klass
           @environments = {}
         end
         
@@ -15,7 +18,14 @@ module CouchRest
         end
 
         def current_database
-          @environments[CouchRest::Model::Config.environment.to_sym] || @environments[:default]
+          current_env = CouchRest::Model::Config.environment.to_sym
+          db = @environments[current_env] || @environments[:default]
+          @klass.ancestors.each do |a| 
+            db ||= 
+              CouchRest::Model::Config.send(a.to_s).environments[current_env] || 
+              CouchRest::Model::Config.send(a.to_s).environments[:default]
+          end unless db
+          db 
         end
 
         def method_missing(environment, *args, &block)

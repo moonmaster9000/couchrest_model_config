@@ -24,9 +24,7 @@ module CouchRest
       end
 
       def models(*args, &block)
-        args.each do |m|
-          configure_model m, &block
-        end
+        args.each {|m| configure_model m, &block }
       end
 
       def reset
@@ -56,7 +54,7 @@ module CouchRest
 
       def model_configs(model=nil)
         @model_configs ||= {}
-        return (@model_configs[model] ||= Model.new) if model
+        return (@model_configs[model] ||= Model.new model) if model
       end
     end
   end

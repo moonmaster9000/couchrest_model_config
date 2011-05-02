@@ -92,3 +92,33 @@ end
 Then /^their database should be the one I configured for the "([^"]*)" environment$/ do |env|
   @dbs.all? {|db| db.name == "#{env}_db"}.should be_true
 end
+
+Given /^I have several models that inherit from a single parent$/ do
+  class ParentModel < CouchRest::Model::Base; end
+  class ChildModel1 < ParentModel; end
+  class ChildModel2 < ParentModel; end
+  class ChildModel3 < ParentModel; end
+  class ChildModel4 < ParentModel; end
+end
+
+Given /^I configure the parent database via the `models` method$/ do
+  CouchRest::Model::Config.edit do 
+    model ParentModel do
+      default "default_db"
+      production "production_db"
+      development "development_db"
+      test "test_db"
+    end
+  end
+end
+
+Given /^I do not configure the database for the child models$/ do
+end
+
+When /^I lookup the current_database for the child models$/ do
+  @dbs = (1..4).to_a.map {|i| CouchRest::Model::Config.send("ChildModel#{i}").current_database}
+end
+
+Then /^their database should be the one I configured for the "([^"]*)" environment on the parent$/ do |env|
+  @dbs.all? {|db| db.name == "#{env}_db"}.should be_true
+end
