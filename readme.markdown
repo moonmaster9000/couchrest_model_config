@@ -83,17 +83,17 @@ In a Rails app, this could be simplified to:
 
 Similarly, you could set the database for a whole set of models in one of two ways:
 
-1. Make every model inherit from the same parent, and set the parent's database via the `database` method
+1. Make every model inherit from the same parent (or mixin the same module), and set the parent's database via the `database` method
 2. Pass several models to the `database` method
 
-### Inheritance
+### Inheritance / Mixins
 
-Let's imagine that our `Book`, `Author`, and `Genre` models all inherited from the `Library` class, which itself inherited from `CouchRest::Model::Base`:
+Let's imagine that our `Book`, `Author`, and `Genre` models all mixed in the `Library` module:
 
-    class Library < CouchRest::Model::Base; end
-    class Book < Library; end
-    class Author < Library; end
-    class Genre < Library; end
+    module Library; end
+    class Book    < CouchRest::Model::Base; include Library; end
+    class Author  < CouchRest::Model::Base; include Library; end
+    class Genre   < CouchRest::Model::Base; include Library; end
 
 To make the `Book`, `Author`, and `Genre` models use the same database, simply set the `Library` database in the config:
 
@@ -103,7 +103,7 @@ To make the `Book`, `Author`, and `Genre` models use the same database, simply s
       end
     end
 
-Now, the database for `Book`, `Author`, and `Genre` will all be set to the same database.
+Now, the database for `Book`, `Author`, and `Genre` will all be set to the same database, "library".
 
 ### Passing several models to the `database` method
 

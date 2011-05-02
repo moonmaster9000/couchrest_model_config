@@ -161,3 +161,20 @@ Then /^I should be able to retrieve configuration information about it via the `
   CouchRest::Model::Config.for(ConfigTest::Model).default.name.should == "config_test_model_default"
   CouchRest::Model::Config.for(ConfigTest::Model).test.should be_nil
 end
+
+When /^I configure the database for a model$/ do
+  class ModelWithCustomServer < CouchRest::Model::Base; end
+end
+
+Then /^I should be able to provide the full URI to the database$/ do
+  CouchRest::Model::Config.edit do
+    database ModelWithCustomServer do
+      default "http://my.custom.server.com/model_db"
+    end
+  end
+end
+
+Then /^the database should use the domain provided for the server instead of the default server$/ do
+  CouchRest::Model::Config.ModelWithCustomServer.default.name.should == "model_db"
+  CouchRest::Model::Config.ModelWithCustomServer.default.server.uri.should == "http://my.custom.server.com"
+end

@@ -1,3 +1,4 @@
+@environment
 Feature: Configuring and Retrieving the environment
   
   Scenario: Environment should default to Rails.env

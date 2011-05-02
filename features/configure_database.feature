@@ -1,30 +1,6 @@
+@db
 Feature: Configure CouchRest::Model database connections
   
-  @server
-  Scenario: Default CouchRest server
-    When I call CouchRest::Model::Config.server.default
-    Then I should get back a CouchRest server defaulted to host "http://127.0.0.1:5984"
-  
-  @server
-  Scenario: Configuring the CouchRest server
-    When I call CouchRest::Model::Config.edit
-    Then I should be able to pass a block to it that configures the default CouchRest server
-
-  @server
-  Scenario Outline: Getting the appropriate server
-    Given I have configured servers for 'default', 'production', 'development', and 'test' environments
-    And my app is in the "<environment>" environment
-    When I call CouchRest::Model::Config.current_server
-    Then I should get back the server I configured for the "<target>" environment
-    
-    Examples:
-      |environment|target|
-      |test|test|
-      |development|development|
-      |production|production|
-      |poo|default|
-
-  @db
   Scenario Outline: Configuring the database for a model 
     Given I have a Book model
     And I have configured databases for 'default', 'production', 'development', and 'test' environments
@@ -39,7 +15,6 @@ Feature: Configure CouchRest::Model database connections
       |production|production|
       |poo|default|
 
-  @db
   Scenario Outline: Configuring the database for a set of models
     Given I have several models
     And I set their database via the `database` method
@@ -54,7 +29,6 @@ Feature: Configure CouchRest::Model database connections
       |production|production|
       |poo|default|
 
-  @db 
   Scenario Outline: Configuring the database for a set of models
     Given I have several models that inherit from a single parent
     And I configure the parent database via the `database` method
@@ -70,7 +44,6 @@ Feature: Configure CouchRest::Model database connections
       |production|production|
       |poo|default|
   
-  @db
   Scenario Outline: Setting the default database
     Given I have several models
     And I configure default databases for all models for the 'test', 'development', 'production', and 'default' environments
@@ -85,9 +58,9 @@ Feature: Configure CouchRest::Model database connections
       |development|development|
       |production|production|
       |poo|default|
-  
-  @db @focus
-  Scenario: Configuring namespace models
-    Given I have a namespaced model
-    Then  I should be able to configure it just like all other models
-    And   I should be able to retrieve configuration information about it via the `for` method on CouchRest::Model::Config
+
+  @focus
+  Scenario: Setting the server while configuring the database
+    When I configure the database for a model
+    Then I should be able to provide the full URI to the database
+    And the database should use the domain provided for the server instead of the default server

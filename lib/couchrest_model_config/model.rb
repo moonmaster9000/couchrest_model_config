@@ -37,7 +37,17 @@ module CouchRest
 
         def method_missing(environment, *args, &block)
           return @environments[environment] if args.length == 0
-          @environments[environment] = CouchRest::Model::Config.current_server.database! args.first
+          couch_server, database = parse_database_config args.first
+          @environments[environment] = couch_server.database! database
+        end
+
+        private
+        def parse_database_config(db)
+          if db.match(%r{^(https?://.*)/(.*)$})
+            [CouchRest.new($1), $2]
+          else
+            [CouchRest::Model::Config.current_server, db]
+          end
         end
       end
     end
