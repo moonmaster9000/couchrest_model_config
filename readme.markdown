@@ -10,20 +10,22 @@ Install the gem `couchrest_model_config` however you see fit to do so. Then `req
 
 By default, CouchRest::Model::Config assumes a Rails 3 app, and will detect your app's environment via `Rails.env`. If you're using this in something other than a Rails 3 app,
 then simply override the default environment detection:
-    
-    # Sinatra example
-    CouchRest::Model::Config.edit do
-      environment do
-        settings.environment
-      end
-    end
 
-    # Rack example
-    CouchRest::Model::Config.edit do
-      environment do
-        ENV['RACK_ENV'] || 'development'
-      end
-    end
+```ruby
+# Sinatra example
+CouchRest::Model::Config.edit do
+  environment do
+    settings.environment
+  end
+end
+
+# Rack example
+CouchRest::Model::Config.edit do
+  environment do
+    ENV['RACK_ENV'] || 'development'
+  end
+end
+```
 
 ## Configuring the default database
 
