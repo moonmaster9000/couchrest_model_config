@@ -32,23 +32,27 @@ end
 Suppose you want all of your couchrest models to use the same database in your application. No problem! You can use the `database` configuration method without
 any arguments:
 
-    CouchRest::Model::Config.edit do
-      database do
-        default "my_db_#{Rails.env}"
-      end
-    end
+```ruby
+CouchRest::Model::Config.edit do
+  database do
+    default "my_db_#{Rails.env}"
+  end
+end
+```
 
 This means that the default database name for all of your models will be "my_db_" followed by your Rails environment.
 
 You could customize the database names per environment further:
 
-    CouchRest::Model::Config.edit do
-      database do
-        default "my_db_#{Rails.env}"
-        production "my_production_db"
-        test "funny_test_db_name"
-      end
-    end
+```ruby
+CouchRest::Model::Config.edit do
+  database do
+    default "my_db_#{Rails.env}"
+    production "my_production_db"
+    test "funny_test_db_name"
+  end
+end
+```
 
 For any environment not explicitly configured, it will fall back to the database name.
 
@@ -57,29 +61,35 @@ For any environment not explicitly configured, it will fall back to the database
 To set the database for a model, use the `database` method. For example, suppose we'd like to set the database name for our `Book` model to 
 `library` in all environments:
 
-    CouchRest::Model::Config.edit do
-      database Book do
-        default "library"
-      end
-    end
+```ruby
+CouchRest::Model::Config.edit do
+  database Book do
+    default "library"
+  end
+end
+```
 
 Or, perhaps we'd like to differentiate the name between production, development, and test environments:
 
-    CouchRest::Model::Config.edit do
-      database Book do
-        production "library_production"
-        development "library_development"
-        test "library_test"
-      end
-    end
+```ruby
+CouchRest::Model::Config.edit do
+  database Book do
+    production "library_production"
+    development "library_development"
+    test "library_test"
+  end
+end
+```
 
 In a Rails app, this could be simplified to:
 
-    CouchRest::Model::Config.edit do
-      database Book do
-        default "library_#{Rails.env}"
-      end
-    end
+```ruby
+CouchRest::Model::Config.edit do
+  database Book do
+    default "library_#{Rails.env}"
+  end
+end
+```
 
 ## Configuring the database for a set of models
 
@@ -92,18 +102,22 @@ Similarly, you could set the database for a whole set of models in one of two wa
 
 Let's imagine that our `Book`, `Author`, and `Genre` models all mixed in the `Library` module:
 
-    module Library; end
-    class Book    < CouchRest::Model::Base; include Library; end
-    class Author  < CouchRest::Model::Base; include Library; end
-    class Genre   < CouchRest::Model::Base; include Library; end
+```ruby
+module Library; end
+class Book    < CouchRest::Model::Base; include Library; end
+class Author  < CouchRest::Model::Base; include Library; end
+class Genre   < CouchRest::Model::Base; include Library; end
+```
 
 To make the `Book`, `Author`, and `Genre` models use the same database, simply set the `Library` database in the config:
 
-    CouchRest::Model::Config.edit do
-      database Library do
-        default "library"
-      end
-    end
+```ruby
+CouchRest::Model::Config.edit do
+  database Library do
+    default "library"
+  end
+end
+```
 
 Now, the database for `Book`, `Author`, and `Genre` will all be set to the same database, "library".
 
@@ -112,11 +126,13 @@ Now, the database for `Book`, `Author`, and `Genre` will all be set to the same 
 Suppose `Book`, `Author`, and `Genre` couldn't all inherit from the same parent class, yet we'd still like all of them to share the same database;
 then we could simply pass all of the models to the `database` method:
 
-    CouchRest::Model::Config.edit do
-      database Book, Author, Genre do
-        default "library"
-      end
-    end
+```ruby
+CouchRest::Model::Config.edit do
+  database Book, Author, Genre do
+    default "library"
+  end
+end
+```
 
 ## Configuring the CouchDB server 
 
@@ -124,31 +140,37 @@ Without any configuration, CouchRest::Model::Config will assume a CouchDB server
 
 If you'd like to set a default server for all models regardless of environment, then try:
 
-    CouchRest::Model::Config.edit do
-      server do
-        default "http://admin:password@localhost:5984"
-      end
-    end
+```ruby
+CouchRest::Model::Config.edit do
+  server do
+    default "http://admin:password@localhost:5984"
+  end
+end
+```
 
 If you wanted to change the server to be different in the `production` environment:
 
-    CouchRest::Model::Config.edit do
-      server do
-        default "http://admin:password@localhost:5984"
-        production "https://root:blah@my.production.server:5984"
-      end
-    end
+```ruby
+CouchRest::Model::Config.edit do
+  server do
+    default "http://admin:password@localhost:5984"
+    production "https://root:blah@my.production.server:5984"
+  end
+end
+```
 
 Now, in the production environment, it will connect to CouchDB server `my.production.server`; in all other environments, it will connect to `localhost`.
 
 If you'd like to change the CouchDB server for a specific model or set of models, simply set the database name for the model (or models) to the entire
 CouchDB uri for the database:
 
-    CouchRest::Model::Config.edit do
-      database Blog do
-        default "http://localhost:5984/blog"
-      end
-    end
+```ruby
+CouchRest::Model::Config.edit do
+  database Blog do
+    default "http://localhost:5984/blog"
+  end
+end
+```
 
 ## LICENSE
 
