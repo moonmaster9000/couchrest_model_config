@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    couchrest_model_database_config (0.0.0)
+    couchrest_model_config (0.0.1)
       couchrest_model (~> 1.0.0)
 
 GEM
@@ -78,6 +78,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  couchrest_model_database_config!
+  couchrest_model_config!
   cucumber (~> 0.10.0)
   rspec (~> 2.4.0)

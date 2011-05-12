@@ -8,6 +8,12 @@ module CouchRest
 
         alias_method_chain :database, :couchrest_model_config
       end
+      
+      def database_with_couchrest_model_config
+        database_without_couchrest_model_config || CouchRest::Model::Config.for(self.class).current_database
+      end
+
+      alias_method_chain :database, :couchrest_model_config
     end
   end
 end
