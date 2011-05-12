@@ -1,3 +1,6 @@
+v0.1.2
+  -- CouchRest inheritable attribute override gone. simpler method for fixing rails reloading problem.
+
 v0.1.1
   -- overrode the CouchRest inheritable attributes code to only create the inheritable attributes
      if they don't already exist. Should hopefully solve a problem that crops up in development mode in 
