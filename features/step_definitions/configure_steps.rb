@@ -221,3 +221,11 @@ end
 When /^I call the `database` method on an instance of the model$/ do
   @model_database = IndirectlyConfiguredModel.new.database
 end
+
+When /^I call the `use_database` method on CouchRest::Model::Base$/ do
+  @call = proc { CouchRest::Model::Base.use_database }
+end
+
+Then /^I should receive an exception that the `use_database` method is not suported with couchrest_model_config$/ do
+  @call.should raise_exception("We're sorry, but the `use_database` method is not supported with couchrest_model_config.")
+end

@@ -65,12 +65,10 @@ Feature: Configure CouchRest::Model database connections
     And the database should use the domain provided for the server instead of the default server
 
   @focus
-  Scenario: Database configured directly on the model takes highest precedence
-    Given I have configured the database for a model directly on the model via `use_database`
-    And I have configured the database for that model via CouchRest::Model::Config
-    When I call the `database` method on the model
-    Then I should receive the database configured directly on the model via `use_database`
-  
+  Scenario: CouchRest::Model::Base.use_database method no longer support
+    When I call the `use_database` method on CouchRest::Model::Base
+    Then I should receive an exception that the `use_database` method is not suported with couchrest_model_config
+
   @focus
   Scenario: Looking up the model's database via the model itself
     Given I have configured the database for a model via CouchRest::Model::Config

@@ -2,18 +2,18 @@ module CouchRest
   module Model
     class Base
       class << self
-        def database_with_couchrest_model_config
-          database_without_couchrest_model_config || CouchRest::Model::Config.for(self).current_database
+        def database
+          CouchRest::Model::Config.for(self).current_database
         end
 
-        alias_method_chain :database, :couchrest_model_config
+        def use_database(*args)
+          raise "We're sorry, but the `use_database` method is not supported with couchrest_model_config."
+        end
       end
       
-      def database_with_couchrest_model_config
-        database_without_couchrest_model_config || CouchRest::Model::Config.for(self.class).current_database
+      def database
+        CouchRest::Model::Config.for(self.class).current_database
       end
-
-      alias_method_chain :database, :couchrest_model_config
     end
   end
 end
