@@ -1,3 +1,8 @@
+v0.1.1
+  -- overrode the CouchRest inheritable attributes code to only create the inheritable attributes
+     if they don't already exist. Should hopefully solve a problem that crops up in development mode in 
+     rails when trying to override an attribute accessor/writer method created with this.
+
 v0.1.0
   -- `use_database` no longer supported when using CouchRest::Model::Config
 
