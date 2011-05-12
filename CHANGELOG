@@ -1,0 +1,3 @@
+v0.0.2
+  -- alias_method_chain both the class and instance `database` methods 
+     on CouchRest::Model::Base
