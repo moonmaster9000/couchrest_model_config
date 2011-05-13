@@ -62,7 +62,6 @@ module CouchRest
       def model_configs(model=nil)
         model = model.to_s.to_sym if model
         @model_configs ||= {}
-        puts @model_configs.inspect
         return (@model_configs[model] ||= Model.new model) if model
       end
 

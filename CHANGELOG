@@ -1,3 +1,6 @@
+v0.2.2
+  -- it's fixed! removing superfluous put. note: class names as hash keys doesn't play well with rails reloading.
+
 v0.2.1
   -- looking promising. this should fix it once and for all.
 
