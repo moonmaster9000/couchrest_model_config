@@ -38,12 +38,10 @@ module CouchRest
       end
 
       def for(m)
-        m = m.to_s.camelize.constantize unless m.class == Class
         model_configs(m)
       end
 
       def method_missing(model, *args, &block)
-        model = model.to_s.camelize.constantize
         return model_configs(model) unless block
         configure_model model, &block
       end
@@ -62,7 +60,9 @@ module CouchRest
       end
 
       def model_configs(model=nil)
+        model = model.to_s.to_sym if model
         @model_configs ||= {}
+        puts @model_configs.inspect
         return (@model_configs[model] ||= Model.new model) if model
       end
 

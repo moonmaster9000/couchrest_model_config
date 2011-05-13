@@ -1,3 +1,6 @@
+v0.2.1
+  -- looking promising. this should fix it once and for all.
+
 v0.2.0
   -- ok, new tack - forget all the other attempts to fix the rails reloading problem. this should fix it.
 
