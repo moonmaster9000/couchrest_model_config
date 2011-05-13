@@ -5,6 +5,7 @@ module CouchRest
         attr_reader :environments
 
         def initialize(klass)
+          klass = klass.to_s.camelize.constantize unless klass.class == Class rescue klass
           @klass = klass
           @environments = {}
         end
